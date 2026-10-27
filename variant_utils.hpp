@@ -5,7 +5,6 @@
 #include "exceptions.hpp"
 
 #include <variant>
-#include <locale>
 #include <string>
 
 /**
@@ -86,10 +85,10 @@ namespace utl
     template <typename R, typename V>
     [[nodiscard]] inline R convert_variant(V&& v)
     {
-        static_assert(has_unique_types_v<utl::remove_cvref_t<V>>, "The source variant type cannot hold the same type more than once");
-        static_assert(has_unique_types_v<R>, "The target variant type cannot hold the same type more than once");
         static_assert(is_template_type_specialisation_v<std::variant, utl::remove_cvref_t<V>>, "The source type must be a std::variant");
         static_assert(is_template_type_specialisation_v<std::variant, R>, "The target type must be a std::variant");
+        static_assert(has_unique_types_v<utl::remove_cvref_t<V>>, "The source variant type cannot hold the same type more than once");
+        static_assert(has_unique_types_v<R>, "The target variant type cannot hold the same type more than once");
         return std::visit(
             [](auto&& val) -> R
             {
